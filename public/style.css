@@ -1,20 +1,20 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #0f1117;
-  --surface: #1a1d27;
-  --surface2: #22263a;
-  --border: #2e3350;
-  --accent: #5b8af0;
-  --accent-hover: #7aa4f8;
+  --bg: #130d0f;
+  --surface: #1e1518;
+  --surface2: #271c20;
+  --border: #3a2528;
+  --accent: #c01230;
+  --accent-hover: #d9183a;
   --danger: #e05252;
   --danger-hover: #f06060;
   --success: #4caf7d;
-  --text: #e2e8f0;
-  --text-muted: #7c85a2;
-  --text-dim: #4a5272;
+  --text: #f0ece8;
+  --text-muted: #9a8a8e;
+  --text-dim: #52404a;
   --radius: 8px;
-  --shadow: 0 2px 8px rgba(0,0,0,.4);
+  --shadow: 0 2px 8px rgba(0,0,0,.5);
 }
 
 html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: var(--bg); color: var(--text); }
