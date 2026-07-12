@@ -236,6 +236,8 @@
     const strong = el('strong'); strong.textContent = currentUser.username;
     userInfo.appendChild(strong);
     userInfo.appendChild(document.createTextNode(currentUser.role));
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const btnsRow = el('div', { id: 'sidebar-footer-btns' });
     const logoutBtn = el('button', { id: 'logout-btn' });
     logoutBtn.textContent = 'Sign out';
     logoutBtn.addEventListener('click', async () => {
@@ -243,10 +245,15 @@
       currentUser = null;
       render();
     });
+    const themeBtn = el('button', { id: 'theme-btn', title: 'Toggle light/dark mode' });
+    themeBtn.textContent = isDark ? '☀️' : '🌙';
+    themeBtn.addEventListener('click', toggleTheme);
+    btnsRow.appendChild(logoutBtn);
+    btnsRow.appendChild(themeBtn);
     const credit = el('div', { style: 'padding:8px 12px 2px;font-size:.68rem;color:var(--text-dim);text-align:center' });
     credit.innerHTML = 'Design by <a href="https://tavaone.com/#dev" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">Tava One LLC</a>';
     footer.appendChild(userInfo);
-    footer.appendChild(logoutBtn);
+    footer.appendChild(btnsRow);
     footer.appendChild(credit);
 
     sidebar.appendChild(header);
@@ -915,8 +922,30 @@
     setTimeout(() => usernameInput.focus(), 50);
   }
 
+  /* ── Theme ── */
+  function applyTheme(theme) {
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('theme', theme);
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+    // Update button icon if it exists
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = current === 'dark' ? '🌙' : '☀️';
+  }
+
   /* ── Boot ── */
   async function boot() {
+    // Apply saved theme (default: light)
+    const saved = localStorage.getItem('theme') || 'light';
+    applyTheme(saved);
+
     try {
       currentUser = await api('GET', '/auth/me');
     } catch {
