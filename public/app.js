@@ -191,24 +191,10 @@
   function renderSidebar(activePage) {
     const sidebar = el('div', { id: 'sidebar' });
     const header = el('div', { id: 'sidebar-header' });
-    // Church heart-logo SVG
-    const logoWrap = el('div', { style: 'display:flex;align-items:center;gap:10px;margin-bottom:8px' });
-    logoWrap.innerHTML = `<svg width="38" height="38" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M22 39C22 39 4 26 4 14.5C4 8.7 8.2 5 14 5C17.5 5 20.5 6.8 22 9.2C23.5 6.8 26.5 5 30 5C35.8 5 40 8.7 40 14.5C40 26 22 39 22 39Z" fill="#c01230"/>
-      <rect x="17" y="24" width="10" height="9" rx="0.5" fill="white" opacity="0.9"/>
-      <polygon points="22,13 13,23 31,23" fill="white" opacity="0.9"/>
-      <rect x="21" y="10" width="2" height="5" fill="white" opacity="0.9"/>
-      <rect x="18.5" y="12" width="7" height="1.5" fill="white" opacity="0.9"/>
-      <rect x="19.5" y="28" width="5" height="5" fill="#c01230"/>
-      <rect x="17.5" y="25.5" width="3" height="2.5" fill="#c01230" opacity="0.7"/>
-      <rect x="23.5" y="25.5" width="3" height="2.5" fill="#c01230" opacity="0.7"/>
-    </svg>`;
-    const nameBlock = el('div');
-    const h1 = el('h1'); h1.textContent = 'St. Pete First';
-    const p = el('p'); p.textContent = 'Signage Admin';
-    nameBlock.appendChild(h1); nameBlock.appendChild(p);
-    logoWrap.appendChild(nameBlock);
-    header.appendChild(logoWrap);
+    const logoImg = el('img', { src: '/logo.webp', alt: 'St. Pete First UMC', id: 'sidebar-logo' });
+    header.appendChild(logoImg);
+    const p = el('p', { id: 'sidebar-tagline' }); p.textContent = 'Signage Admin';
+    header.appendChild(p);
 
     const navItems = [
       { hash: 'screens', icon: '📺', label: 'Screens' },
