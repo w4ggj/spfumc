@@ -41,14 +41,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:#000}
 .slide.active{opacity:1}
 #idle{
   position:fixed;top:0;left:0;width:100%;height:100%;
-  background:#1a1a2e;display:none;align-items:center;justify-content:center;
-  color:#444;font-family:Georgia,serif;font-size:1.5rem;letter-spacing:.1em
+  background:#0d0d0d;display:none;flex-direction:column;align-items:center;justify-content:center;gap:28px
 }
+#idle img{width:320px;max-width:70vw;height:auto;opacity:.85}
+#idle p{color:#555;font-family:Georgia,serif;font-size:1.1rem;letter-spacing:.12em;text-transform:uppercase}
 </style>
 </head>
 <body class="${orientation === 'portrait' ? 'portrait' : ''}">
 <div id="stage"></div>
-<div id="idle">No content assigned</div>
+<div id="idle"><img src="/logo.webp" alt="St. Pete First UMC"><p>No content assigned</p></div>
 <script>
 (function(){
 const TOKEN='${token}';
