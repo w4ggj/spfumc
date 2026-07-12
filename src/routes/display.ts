@@ -41,10 +41,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:#000}
 .slide.active{opacity:1}
 #idle{
   position:fixed;top:0;left:0;width:100%;height:100%;
-  background:#0d0d0d;display:none;flex-direction:column;align-items:center;justify-content:center;gap:28px
+  background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:28px
 }
-#idle img{width:320px;max-width:70vw;height:auto;opacity:.85}
-#idle p{color:#555;font-family:Georgia,serif;font-size:1.1rem;letter-spacing:.12em;text-transform:uppercase}
+#idle img{width:320px;max-width:70vw;height:auto}
+#idle p{color:#aaa;font-family:Georgia,serif;font-size:1.1rem;letter-spacing:.12em;text-transform:uppercase}
 </style>
 </head>
 <body class="${orientation === 'portrait' ? 'portrait' : ''}">
