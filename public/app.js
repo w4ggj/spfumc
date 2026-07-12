@@ -244,7 +244,7 @@
       render();
     });
     const credit = el('div', { style: 'padding:8px 12px 2px;font-size:.68rem;color:var(--text-dim);text-align:center' });
-    credit.innerHTML = 'Design by <a href="https://tavaone.com" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">Tava One LLC</a>';
+    credit.innerHTML = 'Design by <a href="https://tavaone.com/#dev" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">Tava One LLC</a>';
     footer.appendChild(userInfo);
     footer.appendChild(logoutBtn);
     footer.appendChild(credit);
