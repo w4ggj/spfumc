@@ -52,7 +52,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:#000}
 <script>
 (function(){
 const TOKEN='${token}';
-let cfg=null,playlist=[],idx=0,timer=null,pollTimer=null,curImg=null,nextImg=null,version=null;
+let cfg=null,playlist=[],idx=0,timer=null,pollTimer=null,curImg=null,version=null;
 const stage=document.getElementById('stage');
 const idle=document.getElementById('idle');
 
@@ -60,7 +60,7 @@ function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=0|Math.
 
 function preload(url){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});}
 
-function showIdle(){idle.style.display='flex';stage.innerHTML='';clearTimeout(timer);}
+function showIdle(){idle.style.display='flex';stage.innerHTML='';clearTimeout(timer);timer=null;curImg=null;}
 
 function createSlide(url){
   const img=document.createElement('img');
@@ -104,33 +104,39 @@ function buildPlaylist(config){
   return imgs;
 }
 
-async function applyConfig(config,forceRestart){
+function startPlaylist(){
+  // Show first image immediately, crossfading from whatever is on screen
+  clearTimeout(timer);
+  timer=null;
+  idle.style.display='none';
+  idx=0;
+  const firstSlide=createSlide(playlist[0].url);
+  if(curImg){
+    stage.appendChild(firstSlide);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      firstSlide.classList.add('active');
+      const old=curImg;
+      old.classList.remove('active');
+      setTimeout(()=>old.remove(),1100);
+      curImg=firstSlide;
+    }));
+  } else {
+    stage.innerHTML='';
+    stage.appendChild(firstSlide);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{firstSlide.classList.add('active');curImg=firstSlide;}));
+  }
+  const speed=(cfg?.group?.rotation_speed||8)*1000;
+  timer=setTimeout(advance,speed);
+}
+
+function applyConfig(config,forceRestart){
   const newVersion=config.config_version;
   if(!forceRestart&&newVersion===version)return;
   version=newVersion;
   cfg=config;
-  const newPlaylist=buildPlaylist(config);
-  if(!newPlaylist.length){showIdle();playlist=[];return;}
-  // Rebuild at next boundary only
-  if(forceRestart){
-    clearTimeout(timer);
-    playlist=newPlaylist;
-    idx=-1;
-    // Pre-show first image immediately
-    if(playlist.length){
-      const firstSlide=createSlide(playlist[0].url);
-      stage.innerHTML='';
-      stage.appendChild(firstSlide);
-      requestAnimationFrame(()=>requestAnimationFrame(()=>{firstSlide.classList.add('active');curImg=firstSlide;}));
-      idx=0;
-      const speed=(cfg.group.rotation_speed||8)*1000;
-      timer=setTimeout(advance,speed);
-    }
-  } else {
-    // Switch at next boundary — just update playlist reference
-    playlist=newPlaylist;
-    idx=Math.min(idx,playlist.length-1);
-  }
+  playlist=buildPlaylist(config);
+  if(!playlist.length){showIdle();return;}
+  startPlaylist();
 }
 
 async function poll(){
@@ -187,6 +193,7 @@ app.get('/api/display/:token', async (c) => {
   }>();
   if (!screen) return c.json({ error: 'Not found' }, 404);
 
+  const noCache = { headers: { 'Cache-Control': 'no-store, no-cache' } };
   if (!screen.active_group_id) {
     const version = await computeConfigVersion(null, 0, [], 0, 0);
     return c.json({
@@ -194,7 +201,7 @@ app.get('/api/display/:token', async (c) => {
       group: null,
       images: [],
       config_version: version,
-    });
+    }, 200, noCache.headers);
   }
 
   const group = await c.env.DB.prepare('SELECT * FROM groups WHERE id = ?')
@@ -207,7 +214,7 @@ app.get('/api/display/:token', async (c) => {
       group: null,
       images: [],
       config_version: version,
-    });
+    }, 200, { 'Cache-Control': 'no-store, no-cache' });
   }
 
   const imageRows = await c.env.DB.prepare(`
@@ -234,7 +241,7 @@ app.get('/api/display/:token', async (c) => {
     group: { rotation_speed: group.rotation_speed, shuffle: group.shuffle === 1 },
     images,
     config_version: version,
-  });
+  }, 200, { 'Cache-Control': 'no-store, no-cache' });
 });
 
 export default app;
