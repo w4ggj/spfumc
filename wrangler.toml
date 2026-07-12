@@ -1,0 +1,29 @@
+name = "spfumc"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "spfumc-db"
+database_id = "placeholder-replace-after-creation"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "spfumc-images"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "placeholder-replace-after-creation"
+
+# Uncomment and configure when Cloudflare Images is available on your plan:
+# [[images]]
+# binding = "IMAGES"
+
+[vars]
+# SESSION_SECRET is a secret — set via: wrangler secret put SESSION_SECRET
